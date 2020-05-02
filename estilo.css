@@ -1,0 +1,107 @@
+
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0; padding: 0;
+  background: #dedede;
+  margin-bottom: 25px;
+}
+
+.linha {
+    width: 960px;
+    margin: 0 auto;
+    overflow: auto;
+    padding: 5px 0;
+}
+.coluna {
+    padding: 0 10px;
+    float: left;
+}
+.coli1 {
+    width: 60px;
+}
+.coli2 {
+width: 140px;
+}
+.coli3 {
+width: 220px;
+}
+.coli4 {
+width: 300px;
+}
+.coli5 {
+width: 380px;
+}
+.coli6 {
+width: 460px;
+}
+.coli7 {
+width: 540px;
+}
+.coli8 {
+width: 620px;
+}
+.coli9 {
+width: 700px;
+}
+.coli10 {
+width: 780px;
+}
+.coli11 {
+width: 860px;
+}
+.coli12 {
+width: 940px;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    margin: 15px 0 10px;
+}
+ul li, ol li {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+ul.inline li, ol.inline li {
+    display: inline;
+    margin-right: 30px;
+    margin-left: 30px;
+}
+.menu {
+    background: #1f3c58;
+}
+.menu li {
+    padding: 10px;
+}
+.menu li a {
+    color: white;
+    text-decoration: none;
+}
+.menu li:hover, menu a:hover {
+    text-decoration: none;
+    background: #365264;
+    color: #ebebeb;
+    border-radius: 3px;
+}
+.conteudo {
+    margin-top: 700px, 0 !important;
+}
+.menu {
+    margin-bottom: 20px;
+}
+.nome {
+    background-color: #5e90af;
+}
+.img_centro{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.justificado {
+    text-align: justify;
+}
+.botao {
+     background: #1f3c58;
+     padding: 3px 10px;
+     border-radius: 3px;
+     color: #ebebeb;
+}

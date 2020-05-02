@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Estufa-Detalhes</title>
+    <link rel="stylesheet" href="estiloestufa.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,500&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="default.min.css">
+    <script src="highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+    <div class="nome">
+        <div class="linha">
+            <div class="coluna coli12">
+                <h1> Estufa Autônoma - Protótipo </h1>
+            </div>
+        </div>
+    </div>
+       <div class="linha">
+        <div class="justificado coluna coli12">
+            <h2>Sobre o Projeto:</h2>
+            <p>A estufa consistia em medir 5 valores do ambiente com o uso de sensores e, através do Arduíno, processá-los a fim de que fosse realizada a melhor ação para a planta, visando entregar a ela os melhores recursos com o menor gasto possível.</p>
+            <p>Foram utilizados sensores para medir a umidade do solo, temperatura da estufa, incidência de luz, CO2 externo e CO2 interno. Através deles e  por meio de algumas pesquisas que forneceram dados relevantes sobre a planta em questão, foi possível determinar quais eram as faixas de valores Ótimos e Nocivos para ela. Desse modo determinou-se qual o melhor tipo de regamento a ser feito para cada ambiente e também a necessidade de alterá-lo com a utilização de um Cooler ou emitindo um aviso, caso a estufa não consiga resolver o problema encontrado.</p>
+
+        </div>
+    </div>
+    <div class="linha">
+        <div class="justificado coluna coli12">
+            <h2>Programação:</h2>
+            <pre><code class="cpp">
+#include &lt;Thermistor.h&gt; // biblioteca Termistor NTC 10K
+
+void setup() {
+    pinMode(A0, INPUT);
+    pinMode(A1, INPUT);
+    pinMode(A2, INPUT);
+    pinMode(A3, INPUT);
+    pinMode(A4, INPUT);
+    pinMode(12, OUTPUT);
+    pinMode(3, OUTPUT);
+    pinMode(4, OUTPUT);
+    Serial.begin(9600);
+
+}
+Thermistor temp(1);
+int U, T, L, CO2e, CO2i; // umidade, temperatura, luz, co2 externo, co2 interno
+
+int cooler = 12, led = 3, agua = 4;
+
+int To = 25; // temperatura otima
+int Te = 27; // temperatura excessiva
+int Ti = 20; // temperatura infema
+int Uo = 50; // umidade otima
+int Un = 30; // umidade normal
+int Unot = 15; // umidade noturnar
+int Ui = 20; // umidade infema
+int DeN = 600; //transicao entre dia e noite
+int Le = 50; // limiar de luz excessiva para planta
+int RTO = 1000; // tempo de regamento para temperatura otima
+int RTI = 5000; // tempo de regamento para temperatura infema
+int RTN = 3000; // tempo de regamento para temperatura normal
+int Rnot = 2000; // tempo de regamento para o periodo noturno
+
+void loop() {
+    U = map(analogRead(A0), 1000, 600, 0, 100); // conversao dos valores do sensor de umidade
+    T = temp.getTemp();
+    L = analogRead(A2);
+    CO2e = analogRead(A3);
+    CO2i = analogRead(A4);
+
+    Serial.print(&quot;CO2i = &quot;);
+    Serial.println(CO2i);
+    Serial.print(&quot;CO2e = &quot;);
+    Serial.println(CO2e);
+    Serial.println();
+    Serial.print(&quot;U = &quot;);
+    Serial.println(U);
+    Serial.println();
+    Serial.print(&quot;T = &quot;);
+    Serial.println(T);
+    Serial.println();
+    Serial.print(&quot;L = &quot;);
+    Serial.println(L);
+    Serial.println();
+    Serial.println();
+    delay(1500);
+
+    digitalWrite(agua, HIGH);
+    digitalWrite(cooler, HIGH);
+    if (L &lt;= DeN) // periodo diurno
+    {
+        if ((T &gt; To) &amp;&amp; (U &lt; Uo)) // regamento para a temperatura otima
+        {
+            digitalWrite(agua, LOW);
+            delay(RTO);
+            digitalWrite(agua, HIGH);
+            delay(2000);
+        } else if ((T &lt; Ti) &amp;&amp; (U &lt; Ui)) // regamento para a temperatura infema
+        {
+            digitalWrite(agua, LOW);
+            delay(RTI);
+            digitalWrite(agua, HIGH);
+            delay(2000);
+
+        } else if (U &lt; Un) // regamento para a temperatura normal
+        {
+            digitalWrite(agua, LOW);
+            delay(RTN);
+            digitalWrite(agua, HIGH);
+            delay(2000);
+        }
+
+        if (L &lt;= Le) { // avisar que a luz esta muito forte
+            digitalWrite(led, HIGH);
+        } else {
+            digitalWrite(led, LOW);
+        }
+
+        if (CO2e &gt; CO2i) // colocar co2 na estufa
+        {
+            digitalWrite(cooler, LOW);
+            delay(2000);
+            digitalWrite(cooler, HIGH);
+        } else {
+            digitalWrite(cooler, HIGH);
+
+        }
+        if (T &gt; Te) { // diminuir a temperatura da estufa
+            digitalWrite(cooler, LOW);
+            delay(5000);
+        } else {
+            digitalWrite(cooler, HIGH);
+
+        }
+    } else // periodo noturno
+    {
+        if (U &lt; Unot) // regamento para o periodo noturno
+        {
+            digitalWrite(agua, LOW);
+            delay(Rnot);
+            digitalWrite(agua, HIGH);
+            delay(2000);
+        }
+
+        if (CO2e &lt; CO2i) // colocar o2 na estufa
+        {
+            digitalWrite(cooler, LOW);
+            delay(2000);
+            digitalWrite(cooler, HIGH);
+        } else {
+            digitalWrite(cooler, HIGH);
+        }
+        if (T &gt; Te) // diminuir a temperatura da estufa
+        {
+            digitalWrite(cooler, LOW);
+            delay(5000);
+        } else {
+            digitalWrite(cooler, HIGH);
+        }
+    }
+
+}
+
+
+            </code></pre>
+
+        </div>
+    </div>
+
+</body>
+</html>
